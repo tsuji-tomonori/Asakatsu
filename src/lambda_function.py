@@ -87,7 +87,10 @@ def lambda_handler(event, context):
             img = f.read()
         os.remove(file_name)
         return {
-            'headers': {"Content-Type": "image/png"},
+            'headers': {
+                "Content-Type": "image/png",
+                "Access-Control-Allow-Origin": "*"
+            },
             'statusCode': 200,
             'body': base64.b64encode(img).decode('utf-8'),
             'isBase64Encoded': True
