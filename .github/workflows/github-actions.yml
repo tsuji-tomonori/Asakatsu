@@ -48,6 +48,7 @@ jobs:
 
       - name: Setup CDK dependencies
         run: |
+          apt-get update && apt-get install -y python3-opencv
           pip install -r requirements.txt
           pip list
 
