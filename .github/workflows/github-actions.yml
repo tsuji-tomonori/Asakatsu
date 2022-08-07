@@ -59,7 +59,7 @@ jobs:
         run: |
           cdk diff --no-path-metadata --no-asset-metadata 2>&1 | tee ./comments
         env:
-          AWS_DEFAULT_REGION: 'ap-northeast-1'
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       
       - name: Post comments
         if: contains(github.event_name, 'pull_request')
@@ -73,7 +73,7 @@ jobs:
         if: contains(github.event_name, 'push')
         run: cdk deploy --no-path-metadata --no-asset-metadata
         env:
-          AWS_DEFAULT_REGION: 'ap-northeast-1'
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 
       - name: Upload cdk.out
         if: contains(github.event_name, 'push')
@@ -84,5 +84,5 @@ jobs:
           aws s3 cp ./cdk.out/ s3://${CDK_OUT_UPLOAD_BUCKET}/${stack}/${uuid}/ --recursive --exclude "*" --include "*.json"
           aws s3 cp ./uuid s3://${CDK_OUT_UPLOAD_BUCKET}/${stack}/
         env:
-          AWS_DEFAULT_REGION: 'ap-northeast-1'
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           CDK_OUT_UPLOAD_BUCKET: ${{ secrets.CDK_OUT_UPLOAD_BUCKET }}
