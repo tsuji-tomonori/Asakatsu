@@ -98,7 +98,10 @@ def lambda_handler(event, context):
     except:
         logger.exception("[NotRetryError]")
         return {
-            'headers': { "Content-type": "text/html" },
+            'headers': {
+                "Content-Type": "image/png",
+                "Access-Control-Allow-Origin": "*"
+            },
             'statusCode': 400,
             'body': "<h1>ERROR</h1>",
         }
