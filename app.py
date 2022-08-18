@@ -54,8 +54,8 @@ class AsakatsuStack(Stack):
         )
 
         website_bucket = s3.Bucket(
-            self, "asakatsu_challenge",
-            bucket_name="asakatsu_challenge",
+            self, "asakatsu-challenge",
+            bucket_name="asakatsu-challenge",
         )
 
         website_distribution = cloudfront.Distribution(
