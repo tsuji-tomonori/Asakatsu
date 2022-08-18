@@ -6,7 +6,7 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_cloudfront as cloudfront,
     aws_s3_deployment as deployment,
-    aws_iam as iam,
+    aws_cloudfront_origins as origins,
     Duration,
     Tags,
 )
@@ -62,9 +62,7 @@ class AsakatsuStack(Stack):
             self, f"clf_{PROJECT_NAME}_WebDistribution_cdk",
             default_root_object="index.html",
             default_behavior=cloudfront.BehaviorOptions(
-                origin=cloudfront.S3OriginConfig(
-                    s3_bucket_source=website_bucket
-                )
+                origin=origins.S3Origin(website_bucket)
             )
         )
 
