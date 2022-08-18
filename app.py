@@ -3,6 +3,10 @@ from aws_cdk import (
     Stack,
     aws_apigateway as apigw,
     aws_lambda as lambda_,
+    aws_s3 as s3,
+    aws_cloudfront as cloudfront,
+    aws_s3_deployment as deployment,
+    aws_cloudfront_origins as origins,
     Duration,
     Tags,
 )
@@ -47,6 +51,32 @@ class AsakatsuStack(Stack):
         cdk.CfnOutput(
             self, "stamp_url",
             value=stamp.path,
+        )
+
+        website_bucket = s3.Bucket(
+            self, "asakatsu-challenge",
+            bucket_name="asakatsu-challenge",
+        )
+
+        website_distribution = cloudfront.Distribution(
+            self, f"clf_{PROJECT_NAME}_WebDistribution_cdk",
+            default_root_object="index.html",
+            default_behavior=cloudfront.BehaviorOptions(
+                origin=origins.S3Origin(website_bucket)
+            )
+        )
+
+        deployment.BucketDeployment(
+            self, f"dep_{PROJECT_NAME}_cdk",
+            sources=[deployment.Source.asset("static")],
+            destination_bucket=website_bucket,
+            distribution=website_distribution,
+            distribution_paths=["/*"]
+        )
+
+        cdk.CfnOutput(
+            self, "url",
+            value=f"https://{website_distribution.domain_name}"
         )
 
 
