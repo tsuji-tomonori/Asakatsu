@@ -98,7 +98,7 @@
             const today = date.getDate()
             const past_days = localStorage.getItem("asakatsu_days")
             const days = past_days ? (past_days + "," + today) : today
-            localStorage.setItem("asakatsu_days", past_days)
+            localStorage.setItem("asakatsu_days", days)
             main_flow(days)
         })
 
