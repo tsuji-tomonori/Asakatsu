@@ -1,0 +1,161 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>毎朝朝活チャレンジ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/Modaal/0.4.4/css/modaal.min.css">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+
+<body>
+    <div class="bg-white py-6 sm:py-8 lg:py-12" id="card">
+        <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
+            <div class="max-w-xl flex flex-col items-center text-center mx-auto">
+                <p class="text-pink-500 md:text-lg xl:text-xl font-semibold mb-4 md:mb-6"># 毎朝朝活チャレンジ</p>
+
+                <h1 class="text-black-800 text-3xl sm:text-4xl md:text-5xl font-bold mb-8 md:mb-12">朝活チャレンジのスタンプを押します!
+                </h1>
+
+                <div class="w-full flex flex-col sm:flex-row sm:justify-center gap-2.5">
+                    <a href="#"
+                        class="create_card_today inline-block bg-pink-500 hover:bg-pink-600 active:bg-pink-700 focus-visible:ring ring-pink-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">今日の分を押す</a>
+
+                    <a href="#"
+                        class="set_days inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-pink-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">まとめて押す</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Modaal/0.4.4/js/modaal.min.js"></script>
+    <script>
+
+        function main_flow(days) {
+            // Loading を表示
+            document.querySelector('#card').innerHTML = `<div class="loader">Loading...</div>`;
+
+            // APIを叩いてスタンプが押された表を取得
+            const url = "https://gjkrn4dg0a.execute-api.ap-northeast-1.amazonaws.com/prod/stamp?year=2022&month=8&days=" + days
+            fetch(url, {
+                method: 'GET'
+            }).then(response => {
+                if (!response.ok) {
+                    throw Error("ParamaterError")
+                }
+                response.blob().then(blobResponse => {
+                    const fileUrl = URL.createObjectURL(blobResponse);
+                    console.log(fileUrl)
+                    // 取得できたのでLoadingを削除
+                    document.querySelector('#card').innerHTML = ``;
+                    // 画像を挿入
+                    document.querySelector('#card').innerHTML = `<div class="create_banner bg-white pb-6 sm:pb-8 lg:pb-12">
+                            <!-- banner - start -->
+                            <div class="flex flex-wrap sm:flex-nowrap sm:justify-center sm:items-center bg-pink-500 relative sm:gap-3 px-4 sm:pr-8 ms:px-8 py-3">
+                                <div class="order-1 sm:order-none w-11/12 sm:w-auto max-w-screen-sm inline-block text-white text-sm md:text-base mb-2 sm:mb-0">Successfully stamped!  </div>
+
+                                <a href="#" class="body_init order-last sm:order-none w-full sm:w-auto inline-block bg-pink-600 hover:bg-pink-700 active:bg-pink-800 focus-visible:ring ring-pink-300 text-white text-xs md:text-sm font-semibold text-center whitespace-nowrap rounded-lg outline-none transition duration-100 px-4 py-2">Go Back To Home</a>
+
+                                <!-- close button - start -->
+                                <div class="order-2 sm:order-none w-1/12 sm:w-auto flex justify-end items-start sm:absolute sm:right-0 sm:mr-1 xl:mr-3">
+                                <button type="button" class="remove_banner text-white hover:text-pink-100 active:text-pink-200 transition duration-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 md:w-6 h-5 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                </div>
+                                <!-- close button - end -->
+                            </div>
+                            <!-- banner - end -->
+                            </div>
+                            <img src='${fileUrl}' /> `;
+                })
+            }).catch(error => {
+                document.querySelector('#card').innerHTML = `<div class="bg-white py-6 sm:py-8 lg:py-12">
+                    <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
+                        <div class="flex flex-col items-center">
+
+                        <p class="text-pink-500 text-sm md:text-base font-semibold uppercase mb-4">That’s a 400</p>
+                        <h1 class="text-gray-800 text-2xl md:text-3xl font-bold text-center mb-2">Invalid Paramater or Server Error</h1>
+
+                        <p class="max-w-screen-md text-gray-500 md:text-lg text-center mb-12">パラメータに誤りがあるかサーバーが落ちています... パラメータを見直して再挑戦してね!</p>
+
+                        <a href="#" class="body_init inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-pink-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">Go home</a>
+                        </div>
+                    </div>
+                    </div>`;
+            });
+        }
+
+        $(document).on("click", ".create_card_today", function () {
+            const date = new Date()
+            const today = date.getDate()
+            const past_days = localStorage.getItem("asakatsu_days")
+            const days = past_days ? (past_days + "," + today) : today
+            localStorage.setItem("asakatsu_days", past_days)
+            main_flow(days)
+        })
+
+        $(document).on("click", ".set_days", function () {
+            document.querySelector('#card').innerHTML = `<div class="bg-white py-6 sm:py-8 lg:py-12">
+                <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
+                    <h2 class="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-8">まとめてスタンプを押す</h2>
+
+                    <div class="max-w-lg border rounded-lg mx-auto">
+                    <div class="flex flex-col gap-4 p-4 md:p-8">
+                        <div>
+                        <label for="days" class="inline-block text-gray-800 text-sm sm:text-base mb-2">日付けをカンマ区切りで入力してね ex)1,2</label>
+                        <input id="input_days" class="w-full bg-gray-50 text-gray-800 border focus:ring ring-pink-300 rounded outline-none transition duration-100 px-3 py-2" />
+                        </div>
+
+                        <button class="create_card_days block bg-gray-800 hover:bg-gray-700 active:bg-gray-600 focus-visible:ring ring-gray-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">スタンプを押す</button>
+
+                    </div>
+                    </div>
+                </div>
+                </div>`;
+            console.log("JHelo")
+        })
+
+
+        $(document).on("click", ".create_card_days", function () {
+            const days_value = document.getElementById('input_days').value;
+            localStorage.setItem("asakatsu_days", days_value)
+            main_flow(days_value)
+        })
+
+        $(document).on("click", ".body_init", function () {
+            document.querySelector('#card').innerHTML = `<div class="bg-white py-6 sm:py-8 lg:py-12" id="card">
+                <div class="max-w-screen-2xl px-4 md:px-8 mx-auto">
+                    <div class="max-w-xl flex flex-col items-center text-center mx-auto">
+                        <p class="text-pink-500 md:text-lg xl:text-xl font-semibold mb-4 md:mb-6"># 毎朝朝活チャレンジ</p>
+
+                        <h1 class="text-black-800 text-3xl sm:text-4xl md:text-5xl font-bold mb-8 md:mb-12">朝活チャレンジのスタンプを押します!</h1>
+
+                        <div class="w-full flex flex-col sm:flex-row sm:justify-center gap-2.5">
+                            <a href="#"
+                                class="create_card_today inline-block bg-pink-500 hover:bg-pink-600 active:bg-pink-700 focus-visible:ring ring-pink-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">今日の分を押す</a>
+
+                            <a href="#"
+                                class="set_days inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-pink-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">まとめて押す</a>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        })
+
+        $(document).on("click", ".remove_banner", function () {
+            document.querySelector('.create_banner').innerHTML = ``
+        })
+
+
+    </script>
+</body>
+
+</html>
