@@ -27,6 +27,9 @@
 
                     <a href="#"
                         class="set_days inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-pink-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">まとめて押す</a>
+
+                    <a href="#"
+                        class="watch_past_days inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-pink-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">今までの記録を見る</a>
                 </div>
             </div>
         </div>
@@ -144,6 +147,9 @@
 
                             <a href="#"
                                 class="set_days inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-pink-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">まとめて押す</a>
+
+                            <a href="#"
+                                class="watch_past_days inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-pink-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3">今までの記録を見る</a>
                         </div>
                     </div>
                 </div>
@@ -152,6 +158,16 @@
 
         $(document).on("click", ".remove_banner", function () {
             document.querySelector('.create_banner').innerHTML = ``
+        })
+
+        $(document).on("click", ".watch_past_days", function () {
+
+            const past_days = localStorage.getItem("asakatsu_days")
+            if (past_days) {
+                main_flow(past_days)
+            } else {
+                alert("まだ登録されていないよ!")
+            }
         })
 
 
